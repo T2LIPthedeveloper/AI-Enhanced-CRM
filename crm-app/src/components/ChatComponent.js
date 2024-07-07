@@ -1,6 +1,5 @@
-// ChatComponent.js
 import React, { useEffect, useState } from 'react';
-import { collection, addDoc, query, where, onSnapshot } from 'firebase/firestore';
+import { collection, addDoc, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { db } from '../firebase_config';
 import { useAuth } from '../auth/AuthProvider';
 
@@ -23,17 +22,24 @@ const ChatComponent = () => {
 
   useEffect(() => {
     if (selectedUser) {
-      // Fetch messages between current user and selected user
+      // Fetch messages where the current user is a participant
       const messagesQuery = query(
         collection(db, 'messages'),
         where('participants', 'array-contains', currentUser.uid),
-        where('participants', 'array-contains', selectedUser)
+        orderBy('createdAt')
       );
       const unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
-        setMessages(snapshot.docs.map(doc => doc.data()));
+        const fetchedMessages = snapshot.docs.map(doc => doc.data());
+        // Filter messages to only those between the current user and the selected user
+        const filteredMessages = fetchedMessages.filter(msg =>
+          msg.participants.includes(selectedUser)
+        );
+        setMessages(filteredMessages);
       });
 
       return () => unsubscribeMessages();
+    } else {
+      setMessages([]);
     }
   }, [currentUser, selectedUser]);
 
@@ -50,7 +56,7 @@ const ChatComponent = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container card p-4 mt-4 shadow-lg">
       <div className="row">
         <div className="col-md-4">
           <h5>Users</h5>
@@ -58,7 +64,7 @@ const ChatComponent = () => {
             {users.map(user => (
               <li
                 key={user.id}
-                className={`list-group-item ${selectedUser === user.id ? 'active' : ''}`}
+                className={`list-group-item shadow-sm ${selectedUser === user.id ? 'active' : ''}`}
                 onClick={() => setSelectedUser(user.id)}
               >
                 {user.displayName}
@@ -70,7 +76,11 @@ const ChatComponent = () => {
           <h5>Messages</h5>
           <div className="border p-3 mb-3" style={{ height: '300px', overflowY: 'scroll' }}>
             {messages.map((msg, index) => (
-              <div key={index} className={`my-2 p-2 ${msg.uid === currentUser.uid ? 'bg-primary text-light' : 'bg-light'}`}>
+              <div 
+                key={index} 
+                className={`my-2 p-2 ${msg.uid === currentUser.uid ? 'bg-primary text-light text-end' : 'bg-light text-start border'}`}
+                style={{ borderRadius: '15px', maxWidth: '100%', alignSelf: msg.uid === currentUser.uid ? 'flex-end' : 'flex-start' }}
+              >
                 {msg.text}
               </div>
             ))}

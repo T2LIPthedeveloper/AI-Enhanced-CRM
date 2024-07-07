@@ -14,7 +14,7 @@ const Navbar = () => {
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <Link className="navbar-brand" to="/">CRM</Link>
+            <Link className="navbar-brand m-2" to="/">CRM</Link>
             <div className="collapse navbar-collapse">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
@@ -22,9 +22,6 @@ const Navbar = () => {
                     </li>
                     <li className="nav-item">
                         <Link className="nav-link" to="/chat">Chat</Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/analytics">Analytics</Link>
                     </li>
                     {currentUser?.email === 'admin@crm.com' && (
                         <li className="nav-item">

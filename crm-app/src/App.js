@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ChatComponent from './components/ChatComponent';
 import LeadsComponent from './components/LeadsComponent';
-import LeadAnalytics from './components/LeadAnalytics';
 import SignIn from './auth/SignIn';
 import SignUp from './auth/SignUp';
 import SplashPage from './SplashPage';
@@ -28,14 +27,6 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <LeadsComponent />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/analytics"
-              element={
-                <PrivateRoute>
-                  <LeadAnalytics />
                 </PrivateRoute>
               }
             />

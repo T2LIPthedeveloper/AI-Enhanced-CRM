@@ -8,13 +8,12 @@ const SplashPage = () => {
   const { currentUser } = useAuth();
 
   return (
-    <div className="container text-center">
-      <h1 className="my-4">Welcome to the CRM</h1>
+    <div className="card p-4 text-center shadow">
+      <h1 className="my-4">Welcome to the CRM.</h1>
       {currentUser ? (
         <div>
-          <p>Quick Links:</p>
-          <Link to="/leads" className="btn btn-primary mx-2">Leads</Link>
-          <Link to="/chat" className="btn btn-primary mx-2">Chat</Link>
+          <Link to="/leads" className="btn btn-outline-primary mx-2">Leads</Link>
+          <Link to="/chat" className="btn btn-outline-primary mx-2">Chat</Link>
           <LeadAnalytics />
         </div>
       ) : (
