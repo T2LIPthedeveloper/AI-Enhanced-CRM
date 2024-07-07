@@ -1,7 +1,7 @@
 // Admin.js
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { db, auth } from '../firebase_config';
+import { db } from '../firebase_config';
 import { useAuth } from './AuthProvider';
 
 const Admin = () => {
